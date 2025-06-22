@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Happy Anniversary!</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fff0f5;
+      font-family: 'Cursive', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      z-index: 2;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #d63384;
+      animation: glow 2s infinite ease-in-out;
+      margin-bottom: 20px;
+    }
+
+    @keyframes glow {
+      0%, 100% {
+        text-shadow: 0 0 10px #ff6ec7, 0 0 20px #ff6ec7;
+      }
+      50% {
+        text-shadow: 0 0 20px #ff1493, 0 0 30px #ff1493;
+      }
+    }
+
+    .anniversary-image {
+      width: 70vw;
+      max-height: 70vh;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
+      animation: float 5s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -100px;
+      width: 30px;
+      height: 30px;
+      background-color: #ff69b4;
+      transform: rotate(-45deg);
+      animation: rise 8s linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-color: #ff69b4;
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -15px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: 15px;
+      top: 0;
+    }
+
+    @keyframes rise {
+      0% {
+        transform: translateY(0) rotate(-45deg) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(-45deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>💖 Happy Anniversary! My Jaan Fokli💍</h1>
+  <img src="hero image.jpg" alt="Anniversary" class="anniversary-image">
+</div>
+
+<!-- Heart Balloons -->
+<script>
+  for (let i = 0; i < 20; i++) {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+    heart.style.opacity = Math.random() + 0.5;
+    document.body.appendChild(heart);
+  }
+</script>
+
+<!-- Confetti Sparkles -->
+<canvas id="confetti"></canvas>
+<script>
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let W = window.innerWidth;
+  let H = window.innerHeight;
+  canvas.width = W;
+  canvas.height = H;
+
+  const confettiCount = 120;
+  const confetti = [];
+
+  for (let i = 0; i < confettiCount; i++) {
+    confetti.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 5 + 1,
+      d: Math.random() * confettiCount,
+      color: `hsl(${Math.random() * 360}, 100%, 75%)`,
+      tilt: Math.floor(Math.random() * 10) - 10
+    });
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    confetti.forEach(c => {
+      ctx.beginPath();
+      ctx.lineWidth = c.r;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r / 2);
+      ctx.stroke();
+    });
+    update();
+  }
+
+  function update() {
+    confetti.forEach(c => {
+      c.y += Math.cos(c.d) + 1 + c.r / 2;
+      c.x += Math.sin(0.01);
+      if (c.y > H) {
+        c.x = Math.random() * W;
+        c.y = -10;
+      }
+    });
+  }
+
+  setInterval(draw, 30);
+  window.addEventListener('resize', () => {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+  });
+</script>
+
+</body>
+</html>
